@@ -20,9 +20,10 @@ export class ContactForm extends Component {
     event.preventDefault();
     const { name, number } = this.state;
     const { contacts, addContact } = this.props;
-    const existingContact = contacts.find(
+    const existingContact = contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
+    console.log(existingContact);
     if (existingContact) {
       alert(`${name} is already in the phonebook.`);
     } else {
