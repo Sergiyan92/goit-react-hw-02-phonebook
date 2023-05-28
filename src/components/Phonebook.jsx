@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
+import css from './Phonebook.module.css';
 
 export class ContactForm extends Component {
   state = {
@@ -23,7 +24,6 @@ export class ContactForm extends Component {
     const existingContact = contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
-    console.log(existingContact);
     if (existingContact) {
       alert(`${name} is already in the phonebook.`);
     } else {
@@ -42,8 +42,10 @@ export class ContactForm extends Component {
   render() {
     const { name, number } = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className={css.contactForm}>
+        <label className={css.label}>Name</label>
         <input
+          className={css.input}
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -52,7 +54,9 @@ export class ContactForm extends Component {
           value={name}
           onChange={this.handleNameChange}
         />
+        <label className={css.label}>Phone</label>
         <input
+          className={css.input}
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
@@ -61,50 +65,44 @@ export class ContactForm extends Component {
           value={number}
           onChange={this.handleNumberChange}
         />
-        <button type="submit">Add Contact</button>
+        <button className={css.button} type="submit">
+          Add Contact
+        </button>
       </form>
     );
   }
 }
 
-export class ContactList extends Component {
-  render() {
-    const { contacts } = this.props;
-    return (
-      <ul>
-        {contacts.map(contact => (
-          <ContactItem key={contact.id} contact={contact} />
-        ))}
-      </ul>
-    );
-  }
-}
-
-export class ContactItem extends Component {
-  render() {
-    const { contact } = this.props;
-    return (
-      <li>
+export const ContactList = ({ contacts, deleteContact }) => (
+  <ul className={css.list}>
+    {contacts.map(contact => (
+      <li key={contact.id} className={css.item}>
         {contact.name} - {contact.number}
+        <button
+          className={css.btnDelete}
+          onClick={() => deleteContact(contact.id)}
+        >
+          Delete
+        </button>
       </li>
-    );
-  }
-}
+    ))}
+  </ul>
+);
 
-export class Filter extends Component {
-  render() {
-    const { filter, handleFilterChange } = this.props;
-    return (
-      <input
-        type="text"
-        name="filter"
-        placeholder="Search"
-        value={filter}
-        onChange={handleFilterChange}
-      />
-    );
-  }
-}
+export const Filter = ({ filter, handleFilterChange }) => (
+  <>
+    <label className={css.labelSearch}>Find contacts by name</label>
+    <input
+      className={css.inputSearch}
+      type="text"
+      name="filter"
+      placeholder="Search"
+      value={filter}
+      onChange={handleFilterChange}
+    />
+  </>
+);
+
 ContactForm.propTypes = {
   addContact: PropTypes.func.isRequired,
 };

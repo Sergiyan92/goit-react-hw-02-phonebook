@@ -2,6 +2,7 @@ import { ContactForm } from './Phonebook';
 import { Filter } from './Phonebook';
 import { ContactList } from './Phonebook';
 import React, { Component } from 'react';
+import css from './Phonebook.module.css';
 
 export class App extends Component {
   state = {
@@ -20,6 +21,12 @@ export class App extends Component {
     }));
   };
 
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
+  };
+
   handleFilterChange = event => {
     this.setState({ filter: event.target.value });
   };
@@ -32,15 +39,17 @@ export class App extends Component {
 
     return (
       <div>
-        <h1>Phonebook</h1>
+        <h1 className={css.title}>Phonebook</h1>
         <ContactForm
           contacts={this.state.contacts}
           addContact={this.addContact}
         />
-
-        <h2>Contacts</h2>
+        <h2 className={css.title}>Contacts</h2>
         <Filter filter={filter} handleFilterChange={this.handleFilterChange} />
-        <ContactList contacts={filteredContacts} />
+        <ContactList
+          contacts={filteredContacts}
+          deleteContact={this.deleteContact}
+        />
       </div>
     );
   }
