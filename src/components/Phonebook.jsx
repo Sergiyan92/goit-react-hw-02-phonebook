@@ -117,3 +117,7 @@ ContactList.propTypes = {
   filter: PropTypes.string,
   handleFilterChange: PropTypes.func,
 };
+Filter.propTypes = {
+  filter: PropTypes.string,
+  handleFilterChange: PropTypes.func,
+};
